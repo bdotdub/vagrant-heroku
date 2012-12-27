@@ -20,64 +20,31 @@ apt-get -y install nfs-common
 
 # Install Ruby from source in /opt so that users of Vagrant
 # can install their own Rubies using packages or however.
-wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p290.tar.gz
-tar xvzf ruby-1.9.2-p290.tar.gz
-cd ruby-1.9.2-p290
+RUBY_VERSION="1.9.3-p327"
+wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-${RUBY_VERSION}.tar.gz
+tar xvzf ruby-${RUBY_VERSION}.tar.gz
+cd ruby-${RUBY_VERSION}
 ./configure --prefix=/opt/ruby
 make
 make install
 cd ..
-rm -rf ruby-1.9.2-p290*
+rm -rf ruby-${RUBY_VERSION}*
 chown -R root:admin /opt/ruby
 chmod -R g+w /opt/ruby
 
-# Install RubyGems 1.3.7
-wget http://production.cf.rubygems.org/rubygems/rubygems-1.3.7.tgz
-tar xzf rubygems-1.3.7.tgz
-cd rubygems-1.3.7
+# Install RubyGems 1.8.23
+RUBYGEM_VERSION="1.8.23"
+wget http://production.cf.rubygems.org/rubygems/rubygems-1.8.23.tgz
+tar xzf rubygems-1.8.23.tgz
+cd rubygems-1.8.23
 /opt/ruby/bin/ruby setup.rb
 cd ..
-rm -rf rubygems-1.3.7*
+rm -rf rubygems-1.8.23*
 
 # Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
 /opt/ruby/bin/gem install puppet --no-ri --no-rdoc
 /opt/ruby/bin/gem install bundler --no-ri --no-rdoc
-
-# Install PostgreSQL 9.1.5
-wget http://ftp.postgresql.org/pub/source/v9.1.5/postgresql-9.1.5.tar.gz
-tar xzf postgresql-9.1.5.tar.gz
-cd postgresql-9.1.5
-./configure --prefix=/usr
-make
-make install
-cd ..
-rm -rf postgresql-9.1.5*
-
-# Initialize postgres DB
-useradd -p postgres postgres
-mkdir -p /var/pgsql/data
-chown postgres /var/pgsql/data
-su -c "/usr/bin/initdb -D /var/pgsql/data --locale=en_US.UTF-8 --encoding=UNICODE" postgres
-mkdir /var/pgsql/data/log
-chown postgres /var/pgsql/data/log
-
-# Start postgres
-su -c '/usr/bin/pg_ctl start -l /var/pgsql/data/log/logfile -D /var/pgsql/data' postgres
-
-# Start postgres at boot
-sed -i -e 's/exit 0//g' /etc/rc.local
-echo "su -c '/usr/bin/pg_ctl start -l /var/pgsql/data/log/logfile -D /var/pgsql/data' postgres" >> /etc/rc.local
-
-# Install NodeJs for a JavaScript runtime
-git clone https://github.com/joyent/node.git
-cd node
-git checkout v0.4.7
-./configure --prefix=/usr
-make
-make install
-cd ..
-rm -rf node*
 
 # Add /opt/ruby/bin to the global path as the last resort so
 # Ruby, RubyGems, and Chef/Puppet are visible
