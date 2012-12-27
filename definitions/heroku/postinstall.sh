@@ -7,7 +7,7 @@ date > /etc/vagrant_box_build_time
 apt-get -y update
 apt-get -y upgrade
 apt-get -y install linux-headers-$(uname -r) build-essential
-apt-get -y install zlib1g-dev libssl-dev libreadline5-dev
+apt-get -y install zlib1g-dev libssl-dev libreadline5-dev libyaml-dev
 apt-get -y install git-core vim
 
 # Setup sudo to allow no-password sudo for "admin"
@@ -85,7 +85,7 @@ rm -rf /dev/.udev/
 rm /lib/udev/rules.d/75-persistent-net-generator.rules
 
 # Install some libraries
-apt-get -y install libxml2-dev libxslt-dev curl libcurl4-openssl-dev libyaml-dev
+apt-get -y install libxml2-dev libxslt-dev curl libcurl4-openssl-dev
 apt-get -y install imagemagick libmagickcore-dev libmagickwand-dev
 apt-get clean
 
