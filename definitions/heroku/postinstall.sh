@@ -85,7 +85,7 @@ rm -rf /dev/.udev/
 rm /lib/udev/rules.d/75-persistent-net-generator.rules
 
 # Install some libraries
-apt-get -y install libxml2-dev libxslt-dev curl libcurl4-openssl-dev
+apt-get -y install libxml2-dev libxslt-dev curl libcurl4-openssl-dev libyaml-dev
 apt-get -y install imagemagick libmagickcore-dev libmagickwand-dev
 apt-get clean
 
